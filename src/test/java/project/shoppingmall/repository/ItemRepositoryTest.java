@@ -20,11 +20,6 @@ class ItemRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
 
-    @BeforeEach
-    public void setUp() {
-        // 테스트 데이터 초기화
-        createItemList();
-    }
 
     @Test
     @DisplayName("상품 저장 테스트")
@@ -58,6 +53,7 @@ class ItemRepositoryTest {
     @Test
     @DisplayName("상품명 조회 테스트")
     public void findByItemNameTest() {
+        this.createItemList();
         List<Item> itemList = itemRepository.findByItemName("테스트 상품1");
         for (Item item : itemList) {
             System.out.println(item.toString());
