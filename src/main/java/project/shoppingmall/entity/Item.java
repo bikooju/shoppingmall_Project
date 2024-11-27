@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import project.shoppingmall.entity.enums.ItemSellStatus;
+import project.shoppingmall.enums.ItemSellStatus;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ITEM")
+@Table(name = "item")
 @Getter
 @Setter
 @ToString
@@ -17,7 +17,7 @@ public class Item {
 
     @Id
     @Column(name = "item_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; //상품 코드
 
     @Column(nullable = false, length = 50)
