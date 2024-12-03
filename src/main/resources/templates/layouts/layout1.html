@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -19,6 +20,8 @@
     <th:block layout:fragment="css"></th:block>
 </head>
 <body>
+
+<!--"~{}"는 다른 템플릿 조각을 포함하는 데 사용됩니다. 이 표현식은 재사용 가능한 템플릿 조각을 포함하여 코드의 중복을 줄이는 데 유용합니다.-->
 
     <div th:replace="~{fragments/header::header}"></div>
 

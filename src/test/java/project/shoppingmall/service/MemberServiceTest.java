@@ -14,7 +14,7 @@ import project.shoppingmall.entity.Member;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-@Transactional //테스트 실행 후 롤백 철가 됩니다. 이를 통해 같은 메소드를 반복적으로 테스트할 수 있다.
+@Transactional // 테스트 중에 발생하는 예외가 트랜잭션을 롤백하게 하여, 테스트가 실패하더라도 데이터베이스의 상태가 깨지지 않도록 합니다.
 @TestPropertySource(locations="classpath:application-test.properties")
 class MemberServiceTest {
 

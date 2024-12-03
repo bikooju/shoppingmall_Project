@@ -27,17 +27,6 @@ public class MemberController {
         return "member/memberForm";
     }
 
-    @PostMapping("/new")
-    public String memberForm(MemberFormDto memberFormDto) {
-        Member member = Member.createMember(memberFormDto, passwordEncoder);
-        memberService.saveMember(member);
-
-        return "redirect:/";
-        //return "redirect:/";는 클라이언트가 요청한 URL에 대한 처리가 끝난 후,
-        // 클라이언트를 루트 URL로 리다이렉트(해당 URL로 이동)하라는 지시를 하는 것입니다.
-        // 예를 들어, 사용자가 어떤 작업을 완료한 후 홈 페이지로 돌아가고 싶을 때 이 코드를 사용할 수 있습니다.
-
-    }
 
     //회원가입이 성공하면 메인페이지로 리다이렉트 시켜주고,
     //화면 정보 검증 및 중복회원 가입 조건에 의해 실패한다면 다시 회원 가입 페이지로 돌아가 실패 이유를 화면에 출력해주겠습니다.
@@ -56,6 +45,9 @@ public class MemberController {
         }
 
         return "redirect:/"; //회원가입이 성공하면 메인페이지로 리다이렉트 시켜줌
+        //return "redirect:/";는 클라이언트가 요청한 URL에 대한 처리가 끝난 후,
+        // 클라이언트를 "/"(루트) URL로 리다이렉트(해당 URL로 이동)하라는 지시를 하는 것입니다.
+        // 예를 들어, 사용자가 어떤 작업을 완료한 후 홈 페이지로 돌아가고 싶을 때 이 코드를 사용할 수 있습니다.
     }
 
     @GetMapping("/login")

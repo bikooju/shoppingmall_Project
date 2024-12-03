@@ -118,6 +118,13 @@
 			<version>${spring-security.version}</version>
 		</dependency>
 
+		<!--관리자 페이지, 로그아웃 기능 도와주는 라이브러리-->
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+			<version>3.1.1.RELEASE</version>
+		</dependency>
+
 
 
 	</dependencies>
