@@ -31,7 +31,6 @@ public class SecurityConfig {
                         .loginPage("/members/login") //로그인 페이지 URL
                         .defaultSuccessUrl("/") //로그인 성공시 이동할 URL
                         .usernameParameter("email") //로그인 시 사용할 파라미터 이름
-                        .failureUrl("/members/login/error") //로그인 실패 시 이동할 URL
                         .failureHandler(new CustomAuthenticationFailureHandler())
                 ).logout( logoutCustomizer -> logoutCustomizer
                         .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout")) //로그아웃 URL

@@ -11,6 +11,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import project.shoppingmall.enums.ItemSellStatus;
 import project.shoppingmall.repository.ItemRepository;
+import project.shoppingmall.repository.MemberRepository;
+import project.shoppingmall.repository.OrderItemRepository;
 import project.shoppingmall.repository.OrderRepository;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,12 @@ class OrderTest {
 
     @Autowired
     ItemRepository itemRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
 
     @PersistenceContext
     EntityManager em;
@@ -69,6 +77,44 @@ class OrderTest {
                 .orElseThrow(EntityNotFoundException::new);
         assertEquals(3,savedOrder.getOrderItems().size()); //OrderItem 엔티티 3개가 실제로 데이터베이스에 저장되었는지 검사
     }
+
+    public Order createOrder() {
+        Order order = new Order();
+
+        for(int i=0; i<3; i++) {
+            Item item = createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem); ///아직 영속성 컨텍스트에 저장되지 않은 orderItem 엔티티를 order 엔티티에 담아줍니다.
+        }
+
+        Member member = new Member();
+        memberRepository.save(member);
+
+        order.setMember(member);
+        orderRepository.save(order);
+        return order;
+    }
+
+    //주문 엔티티(부모 엔티티)에서 주문 상품(자식 엔티티)를 삭제했을 때 orderItem(주문 상품)엔티티가 삭제되는지 테스트
+    @Test
+    @DisplayName("고아객체 제거 테스트")
+    public void orphanRemovalTest() {
+        Order order = createOrder();
+        order.getOrderItems().remove(0); //order 엔티티에서 관리하고 있는 orderItem 리스트의 0번째 인덱스 요소를 제거 [부모 엔티티와 연관관계 끊기]
+        em.flush(); //flush()를 호출하면 orderItem를 삭제하는 쿼리문이 출력됨
+    }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest() {
+
+    }
+
 
 
 
