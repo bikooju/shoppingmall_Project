@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter @Setter
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,12 +37,5 @@ public class Order {
     //기본적으로 연관 관계 단방향 매핑으로 설계 후 나중에 필요할 경우 양방향 매핑을 추가하기
 
     //고아 객체(부모 엔티티와 끊어진 자식 엔티티) 제거 사용 => orphanRemoval = true
-
-
-    private LocalDateTime regTime; //등록 시간
-
-    private LocalDateTime updateTime; //수정 시간
-
-
 
 }
