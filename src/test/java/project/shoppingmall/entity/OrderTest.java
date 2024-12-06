@@ -112,7 +112,21 @@ class OrderTest {
     @Test
     @DisplayName("지연 로딩 테스트")
     public void lazyLoadingTest() {
+        Order order = this.createOrder();
+        Long orderItemId = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
 
+        // 즉시 로딩일 경우 긴 쿼리문(다 가져옴), 지연 로딩일 경우 orderItem 엔티티만 조회하는 쿼리문 실행
+        OrderItem orderItem = orderItemRepository.findById(orderItemId) //order 엔티티에 저장했던 주문 상품 아이디를 이용하여 orderItem을 데이터베이스에서 다시 조회함.
+                .orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass()); //HibernateProxy라고 출력, 지연로딩으로 설정하면 실제 엔티티 대신에 프록시 객체를 넣어둠
+        System.out.println("============================");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("============================");
+
+        //일대일, 다대일로 매핑할 경우 기본 전략인 즉시 로딩(매핑된것들은 전부다 가져온다)을 통해 엔티티를 함께 가져옴
+        //즉시로딩은 실무에서 사용하기 힘들다!! 지연로딩 사용하자 => FetchType.LAZY 설정
     }
 
 

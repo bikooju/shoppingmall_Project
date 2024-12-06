@@ -19,7 +19,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -29,7 +29,7 @@ public class Order {
     private OrderStatus orderStatus; //주문상태
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,
-    orphanRemoval = true) //CascadeType.ALL => 부모(One => Order) 엔티티의 영속성 상태 변화를 자식(Many => OrderItem) 엔티티에 모두 전이
+    orphanRemoval = true, fetch = FetchType.LAZY) //CascadeType.ALL => 부모(One => Order) 엔티티의 영속성 상태 변화를 자식(Many => OrderItem) 엔티티에 모두 전이
     private List<OrderItem> orderItems = new ArrayList<>();
     //왜래키(order_id)가 oder_item 테이블에 있으므로 연관 관계의 주인은 OrderItem 엔티티입니다.
     //Order 엔티티가 주인이 아니므로 "mappedBy" 속성으로 연관 관계의 주인을 설정합니다.

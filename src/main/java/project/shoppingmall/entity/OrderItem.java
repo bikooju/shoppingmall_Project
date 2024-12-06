@@ -15,11 +15,11 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
     @JoinColumn(name = "order_id")
     private Order order; //한 번의 주문으로 여러개의 주문상품 주문할 수 있음
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //지연로딩           즉시로딩 =>FetchType.EAGER
     @JoinColumn(name = "item_id") //하나의 상품은 여러 주문 상품으로 들어갈 수 있음
     private Item item;
 
