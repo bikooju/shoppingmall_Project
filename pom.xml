@@ -125,6 +125,13 @@
 			<version>3.1.1.RELEASE</version>
 		</dependency>
 
+		<!--서로 다른 클래스의 값을 필드의 이름과 자료형이 같으면 getter, setter을 통해 복사해서 객체를 반환해주는 라이브러리-->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 
 
 	</dependencies>
