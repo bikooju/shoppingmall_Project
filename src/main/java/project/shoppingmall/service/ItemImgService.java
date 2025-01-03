@@ -3,18 +3,25 @@ package project.shoppingmall.service;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
+import project.shoppingmall.dto.ItemSearchDto;
+import project.shoppingmall.dto.MainItemDto;
 import project.shoppingmall.entity.ItemImg;
 import project.shoppingmall.repository.ItemImgRepository;
+import project.shoppingmall.repository.ItemRepository;
+
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ItemImgService {
 
+    private final ItemRepository itemRepository;
     @Value("${itemImgLocation}") //@Value 어노테이션을 통해 application.properties 파일에 등록한 itemImgLocation 값을 불러와서 itemImgLocation 변수에 넣어줍니다.
     private String itemImgLocation;
 
@@ -66,5 +73,12 @@ public class ItemImgService {
             // savedItemImg 엔티티는 현재 영속 상태이므로 데이터를 변경하는 것만으로 변경 감지 기능이 동작하여 트랜잭션이 끝날 때 update 쿼리가 실행됩니다.
             // 여기서 중요한 것은 영속성 상태여야 한다는 것입니다.
         }
+
+    }
+
+    //메인 페이지에 상품 데이터를 조회하는 메서드
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }

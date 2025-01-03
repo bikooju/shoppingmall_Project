@@ -10,8 +10,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 import project.shoppingmall.dto.ItemSearchDto;
+import project.shoppingmall.dto.MainItemDto;
+import project.shoppingmall.dto.QMainItemDto;
 import project.shoppingmall.entity.Item;
 import project.shoppingmall.entity.QItem;
+import project.shoppingmall.entity.QItemImg;
 import project.shoppingmall.enums.ItemSellStatus;
 
 import java.time.LocalDateTime;
@@ -86,7 +89,45 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(content, pageable, total); //조회한 데이터를 Page의 클래스 구현체인 PageIml 객체로 반환합니다.
     }
 
+
+    //검색어가 null이 아니면 상품명에 해당 검색어가 포함되는 상품을 조회하는 조건을 반환합니다.
     private BooleanExpression itemNmLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemName.like("%" + searchQuery + "%");
     }
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemDto> content = queryFactory
+                .select(
+                        new QMainItemDto( //QMainItemDto의 생성자에 반환값들을 넣어줍니다. @QueryProjection을 사용하면 DTO로 바로 조회가 가능합니다. 엔티티 조회 후 DTO로 변환하는 과정을 줄일 수 있습니다.
+                                item.id,
+                                item.itemName,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item,item) //itemImg와 item을 내부 조인합니다.
+                .where(itemImg.repImgYn.eq("Y")) //상품 이미지의 경우 대표 상품 이미지만 불러옵니다.
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
 }
